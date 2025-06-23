@@ -63,7 +63,7 @@ abstract class ArcanistLinter extends Phobject {
    * Linters can use this method to provide arbitrary additional information to
    * be included in the output of `arc linters`.
    *
-   * @return map<string, string>  A mapping of header to body content for the
+   * @return array<string, string>  A mapping of header to body content for the
    *                              additional information sections.
    * @task info
    */
@@ -132,7 +132,7 @@ abstract class ArcanistLinter extends Phobject {
    * This ID is assigned automatically by the @{class:ArcanistLintEngine}.
    *
    * @param string Unique linter ID.
-   * @return this
+   * @return ArcanistLinter
    * @task state
    */
   final public function setLinterID($id) {
@@ -405,7 +405,7 @@ abstract class ArcanistLinter extends Phobject {
     $original = null,
     $replacement = null) {
 
-    $message = id(new ArcanistLintMessage())
+    $message = (new ArcanistLintMessage())
       ->setPath($this->getActivePath())
       ->setLine($line)
       ->setChar($char)

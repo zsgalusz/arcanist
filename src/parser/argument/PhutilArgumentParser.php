@@ -114,7 +114,7 @@ final class PhutilArgumentParser extends Phobject {
    * @param   list  List of argument specs, see
    *                @{class:PhutilArgumentSpecification}.
    * @param bool Require flags appear before any non-flag arguments.
-   * @return  this
+   * @return  PhutilArgumentParser
    * @task parse
    */
   public function parsePartial(array $specs, $initial_only = false) {
@@ -122,7 +122,7 @@ final class PhutilArgumentParser extends Phobject {
   }
 
   /**
-   * @return  this
+   * @return  PhutilArgumentParser
    */
   private function parseInternal(
     array $specs,
@@ -312,7 +312,7 @@ final class PhutilArgumentParser extends Phobject {
    *
    * @param   list  List of argument specs, see
    *                @{class:PhutilArgumentSpecification}.
-   * @return  this
+   * @return  PhutilArgumentParser
    * @task parse
    */
   public function parseFull(array $specs) {
@@ -348,7 +348,7 @@ final class PhutilArgumentParser extends Phobject {
    *
    * @param   list  List of argument specs, see
    *                @{class:PhutilArgumentSpecification}.
-   * @return  this
+   * @return  PhutilArgumentParser
    * @task parse
    */
   public function parse(array $specs) {
@@ -369,7 +369,7 @@ final class PhutilArgumentParser extends Phobject {
    *
    * @param   list  List of argument specs, see
    *                @{class:PhutilArgumentSpecification}.
-   * @return  this
+   * @return  PhutilArgumentParser|int
    * @task parse
    */
   public function parseWorkflows(array $workflows) {
@@ -392,7 +392,7 @@ final class PhutilArgumentParser extends Phobject {
    * See @{class:PhutilArgumentWorkflow} for details on using workflows.
    *
    * @param list List of @{class:PhutilArgumentWorkflow}s.
-   * @return PhutilArgumentWorkflow|no  Returns the chosen workflow if it is
+   * @return PhutilArgumentWorkflow|int  Returns the chosen workflow if it is
    *                                    not executable, or executes it and
    *                                    exits with a return code if it is.
    * @task parse
@@ -490,6 +490,9 @@ final class PhutilArgumentParser extends Phobject {
     if ($workflow->isExecutable()) {
       $workflow->setArgv($this);
       $err = $workflow->execute($this);
+      if ($err === null) {
+        $err = 0;
+      }
       exit($err);
     } else {
       return $workflow;
@@ -505,7 +508,7 @@ final class PhutilArgumentParser extends Phobject {
    *    --xprofile <file>   Write out an XHProf profile.
    *    --help              Show help.
    *
-   * @return this
+   * @return PhutilArgumentParser
    *
    * @phutil-external-symbol function xhprof_enable
    */
@@ -582,7 +585,7 @@ final class PhutilArgumentParser extends Phobject {
       $this->showHelp = true;
     }
 
-    $xprofile = $this->getArg('xprofile');
+    /*$xprofile = $this->getArg('xprofile');
     if ($xprofile) {
       if (!function_exists('xhprof_enable')) {
         throw new Exception(
@@ -591,7 +594,7 @@ final class PhutilArgumentParser extends Phobject {
 
       xhprof_enable(0);
       register_shutdown_function(array($this, 'shutdownProfiler'));
-    }
+    }*/
 
     $recon = $this->getArg('recon');
     if ($recon) {
@@ -987,9 +990,10 @@ final class PhutilArgumentParser extends Phobject {
    * @phutil-external-symbol function xhprof_disable
    */
   public function shutdownProfiler() {
-    $data = xhprof_disable();
+    /*$data = xhprof_disable();
     $data = json_encode($data);
     Filesystem::writeFile($this->getArg('xprofile'), $data);
+    */
   }
 
   public static function isTraceModeEnabled() {

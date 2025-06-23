@@ -290,8 +290,8 @@ abstract class ArcanistLintEngine extends Phobject {
   }
 
   /**
-   * @param dict<string path, dict<string version, list<dict message>>>
-   * @return this
+   * @param array
+   * @return ArcanistLintEngine
    */
   final public function setCachedResults(array $results) {
     $this->cachedResults = $results;
@@ -420,9 +420,9 @@ abstract class ArcanistLintEngine extends Phobject {
    * times.
    *
    * @param string  Resource identifier.
-   * @param wild    Optionally, default value to return if resource does not
+   * @param mixed    Optionally, default value to return if resource does not
    *                exist.
-   * @return wild   Resource, or default value if not present.
+   * @return mixed   Resource, or default value if not present.
    */
   public function getLinterResource($key, $default = null) {
     return idx($this->linterResources, $key, $default);
@@ -435,8 +435,8 @@ abstract class ArcanistLintEngine extends Phobject {
    * See @{method:getLinterResource} for a description of this mechanism.
    *
    * @param string Resource identifier.
-   * @param wild   Resource.
-   * @return this
+   * @param mixed   Resource.
+   * @return ArcanistLintEngine
    */
   public function setLinterResource($key, $value) {
     $this->linterResources[$key] = $value;

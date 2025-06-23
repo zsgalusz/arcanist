@@ -21,7 +21,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
   /**
    * Read a message from the channel, if a message is available.
    *
-   * @return wild A message, or null if no message is available.
+   * @return mixed A message, or null if no message is available.
    *
    * @task io
    */
@@ -46,7 +46,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
   /**
    * Write a message to the channel.
    *
-   * @param wild    Some message.
+   * @param mixed    Some message.
    * @return this
    *
    * @task io
@@ -61,7 +61,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
    * Add a message to the queue. While you normally do not need to do this,
    * you can use it to inject out-of-band messages.
    *
-   * @param wild    Some message.
+   * @param mixed    Some message.
    * @return this
    *
    * @task io
@@ -78,7 +78,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
   /**
    * Encode a message for transmission.
    *
-   * @param   wild    Some message.
+   * @param   mixed    Some message.
    * @return  string  The message serialized into a wire format for
    *                  transmission.
    *
@@ -101,7 +101,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
    * to process incoming data in small chunks.
    *
    * @param   string      One or more bytes from the underlying channel.
-   * @return  list<wild>  Zero or more parsed messages.
+   * @return  list<mixed>  Zero or more parsed messages.
    *
    * @task protocol
    */
@@ -114,7 +114,7 @@ abstract class PhutilProtocolChannel extends PhutilChannelChannel {
   /**
    * Wait for a message, blocking until one is available.
    *
-   * @return wild A message.
+   * @return mixed A message.
    *
    * @task wait
    */

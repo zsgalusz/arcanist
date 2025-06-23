@@ -176,8 +176,8 @@ final class PhutilErrorHandler extends Phobject {
    * @param string Error message.
    * @param string File where the error occurred.
    * @param int Line on which the error occurred.
-   * @param wild Error context information.
-   * @return void
+   * @param mixed Error context information.
+   * @return bool|void
    * @task internal
    */
   public static function handleError($num, $str, $file, $line, $ctx = null) {
@@ -258,7 +258,7 @@ final class PhutilErrorHandler extends Phobject {
 
     // See T13499. Convert all other runtime errors not handled in a more
     // specific way into runtime exceptions.
-    throw new RuntimeException($str);
+    throw new RuntimeException($str ?? 'Unknown error');
   }
 
   /**
@@ -292,7 +292,7 @@ final class PhutilErrorHandler extends Phobject {
   /**
    * Output a stacktrace to the PHP error log.
    *
-   * @param trace A stacktrace, e.g. from debug_backtrace();
+   * @param array A stacktrace, e.g. from debug_backtrace();
    * @return void
    * @task internal
    */
@@ -307,7 +307,7 @@ final class PhutilErrorHandler extends Phobject {
   /**
    * Format a stacktrace for output.
    *
-   * @param trace A stacktrace, e.g. from debug_backtrace();
+   * @param array A stacktrace, e.g. from debug_backtrace();
    * @return string Human-readable trace.
    * @task internal
    */
@@ -370,9 +370,9 @@ final class PhutilErrorHandler extends Phobject {
    * dispatched to the listener; this method also prints them to the PHP error
    * log.
    *
-   * @param const Event type constant.
-   * @param wild Event value.
-   * @param dict Event metadata.
+   * @param string Event type constant.
+   * @param mixed Event value.
+   * @param array Event metadata.
    * @return void
    * @task internal
    */
@@ -545,7 +545,7 @@ final class PhutilErrorHandler extends Phobject {
    * origins and has been aggregated or proxied.
    *
    * @param Exception|Throwable Exception to retrieve a trace for.
-   * @return list<wild> List of stack frames.
+   * @return list<mixed> List of stack frames.
    */
   public static function getExceptionTrace($ex) {
     $id = 1;

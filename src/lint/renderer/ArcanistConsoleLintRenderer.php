@@ -107,6 +107,10 @@ final class ArcanistConsoleLintRenderer extends ArcanistLintRenderer {
     $data,
     array $line_map) {
 
+    if ($data === null) {
+      $data = '';
+    }
+
     $context = 3;
 
     $message = $message->newTrimmedMessage();
@@ -350,6 +354,9 @@ final class ArcanistConsoleLintRenderer extends ArcanistLintRenderer {
   }
 
   private function newOffsetMap($data) {
+    if ($data === null) {
+      $data = '';
+    }
     $lines = phutil_split_lines($data);
 
     $line_map = array();

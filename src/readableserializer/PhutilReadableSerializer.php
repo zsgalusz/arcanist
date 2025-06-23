@@ -19,7 +19,7 @@ final class PhutilReadableSerializer extends Phobject {
    * representation of the value; use @{method:printShort} or
    * @{method:printShallow} to summarize values.
    *
-   * @param wild Any value.
+   * @param mixed Any value.
    * @return string Human-readable representation of the value.
    * @task print
    */
@@ -43,7 +43,7 @@ final class PhutilReadableSerializer extends Phobject {
   /**
    * Print a concise, human readable representation of a value.
    *
-   * @param wild Any value.
+   * @param mixed Any value.
    * @return string Human-readable short representation of the value.
    * @task print
    */
@@ -86,7 +86,7 @@ final class PhutilReadableSerializer extends Phobject {
    *
    * To print any number of member variables, pass null for `$max_members`.
    *
-   * @param wild Any value.
+   * @param mixed Any value.
    * @param int Maximum depth to print for nested arrays and objects.
    * @param int Maximum number of values to print at each level.
    * @return string Human-readable shallow representation of the value.
@@ -107,7 +107,7 @@ final class PhutilReadableSerializer extends Phobject {
   /**
    * Implementation for @{method:printShallow}.
    *
-   * @param wild Any value.
+   * @param mixed Any value.
    * @param int Maximum depth to print for nested arrays and objects.
    * @param int Maximum number of values to print at each level.
    * @param int Current depth.

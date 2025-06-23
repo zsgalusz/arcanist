@@ -184,7 +184,7 @@ final class ArcanistLintMessage extends Phobject {
   }
 
   /**
-   * @param dict Keys 'path', 'line', 'char', 'original'.
+   * @param array<string, mixed> Keys 'path', 'line', 'char', 'original'.
    */
   public function setOtherLocations(array $locations) {
     assert_instances_of($locations, 'array');
@@ -273,7 +273,7 @@ final class ArcanistLintMessage extends Phobject {
    * output or XML and will end up with string representations of numbers.
    *
    * @param mixed Integer or digit string.
-   * @return int Integer.
+   * @return int|null Integer.
    */
   private function validateInteger($value, $caller) {
     if ($value === null) {
@@ -368,7 +368,7 @@ final class ArcanistLintMessage extends Phobject {
       }
     }
 
-    return id(clone $this)
+    return (clone $this)
       ->setOriginalText($original)
       ->setReplacementText($replacement)
       ->setLine($line)

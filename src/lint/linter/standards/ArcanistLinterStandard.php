@@ -47,7 +47,7 @@ abstract class ArcanistLinterStandard extends Phobject {
    * Returns linter configuration which is passed to
    * @{method:ArcanistLinter::setLinterConfigurationValue}.
    *
-   * @return map<string, wild>
+   * @return array<string, mixed>
    */
   public function getLinterConfiguration() {
     return array();
@@ -59,7 +59,7 @@ abstract class ArcanistLinterStandard extends Phobject {
    * Returns linter severities which are passed to
    * @{method:ArcanistLinter::addCustomSeverityMap}.
    *
-   * @return map
+   * @return array<string, string>
    */
   public function getLinterSeverityMap() {
     return array();

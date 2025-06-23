@@ -71,7 +71,7 @@ final class PhutilXHPASTBinary extends Phobject {
   /**
    * Constructs an @{class:ExecFuture} for XHPAST.
    *
-   * @param  wild        Data to pass to the future.
+   * @param  mixed        Data to pass to the future.
    * @return ExecFuture
    */
   public static function getParserFuture($data) {

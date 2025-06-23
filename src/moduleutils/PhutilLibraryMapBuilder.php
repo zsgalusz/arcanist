@@ -54,7 +54,7 @@ final class PhutilLibraryMapBuilder extends Phobject {
    * Get the map of symbols in this library, analyzing the library to build it
    * if necessary.
    *
-   * @return map<string, wild> Information about symbols in this library.
+   * @return map<string, mixed> Information about symbols in this library.
    *
    * @task map
    */
@@ -73,7 +73,7 @@ final class PhutilLibraryMapBuilder extends Phobject {
    * Returns a map of file paths to information about symbols used and defined
    * in the file.
    *
-   * @return map<string, wild> Information about files in this library.
+   * @return map<string, mixed> Information about files in this library.
    *
    * @task map
    */

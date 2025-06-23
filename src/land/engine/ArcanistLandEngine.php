@@ -1211,11 +1211,13 @@ abstract class ArcanistLandEngine
       return;
     }
 
+    /*
     $query = pht('Land these changes?');
     $this->getWorkflow()
       ->getPrompt('arc.land.confirm')
       ->setQuery($query)
       ->execute();
+      */
 
     $this->confirmRevisions($sets);
 

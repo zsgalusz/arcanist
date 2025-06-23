@@ -928,6 +928,10 @@ final class Filesystem extends Phobject {
    * @return bool
    */
   public static function isAbsolutePath($path) {
+    if (empty($path)) {
+      return false;
+    }
+    
     if (phutil_is_windows()) {
       return (bool)preg_match('/^[A-Za-z]+:/', $path);
     } else {

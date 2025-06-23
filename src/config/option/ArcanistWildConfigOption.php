@@ -8,7 +8,7 @@ final class ArcanistWildConfigOption
   extends ArcanistConfigOption {
 
   public function getType() {
-    return 'wild';
+    return 'mixed';
   }
 
   public function getStorageValueFromStringValue($value) {

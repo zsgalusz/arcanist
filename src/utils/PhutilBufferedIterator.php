@@ -38,7 +38,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
    *
    * If possible, you should use @{method:getPageSize} to choose a page size.
    *
-   * @return list<wild> List of results.
+   * @return list<mixed> List of results.
    * @task impl
    */
   abstract protected function loadPage();

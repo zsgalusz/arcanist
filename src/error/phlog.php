@@ -5,10 +5,10 @@
  * forwards it to registered listeners. This is essentially a more powerful
  * version of `error_log()`.
  *
- * @param  wild  Any value you want printed to the error log or other registered
+ * @param  mixed  Any value you want printed to the error log or other registered
  *               logs/consoles.
  * @param  ...   Other values to be logged.
- * @return wild  Passed $value.
+ * @return mixed  Passed $value.
  */
 function phlog($value/* , ... */) {
   // Get the caller information.
@@ -55,7 +55,7 @@ function phlog($value/* , ... */) {
  * @param  const  A PhutilErrorHandler constant, like PhutilErrorHandler::ERROR,
  *                which indicates the event type (e.g. error, exception,
  *                user message).
- * @param  wild   The event value, like the Exception object for an exception
+ * @param  mixed   The event value, like the Exception object for an exception
  *                event, an error string for an error event, or some user object
  *                for user messages.
  * @param  dict   A dictionary of metadata about the event. The keys 'file',

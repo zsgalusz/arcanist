@@ -30,7 +30,7 @@ abstract class Future extends Phobject {
    * Resolve a future and return its result, blocking until the result is ready
    * if necessary.
    *
-   * @return wild Future result.
+   * @return mixed Future result.
    */
   public function resolve() {
     $args = func_get_args();
@@ -170,7 +170,7 @@ abstract class Future extends Phobject {
   /**
    * Retrieve the final result of the future.
    *
-   * @return wild Final resolution of this future.
+   * @return mixed Final resolution of this future.
    */
   final protected function getResult() {
     if (!$this->hasResult()) {

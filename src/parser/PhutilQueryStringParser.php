@@ -34,7 +34,7 @@ final class PhutilQueryStringParser extends Phobject {
    * For a more basic parse, see @{method:parseQueryStringToPairList}.
    *
    * @param   string              Query string.
-   * @return  map<string, wild>   Parsed dictionary.
+   * @return  map<string, mixed>   Parsed dictionary.
    */
   public function parseQueryString($query_string) {
     $result = array();

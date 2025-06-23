@@ -48,7 +48,7 @@ abstract class PhutilChannel extends Phobject {
    *
    * The default implementation returns bytes.
    *
-   * @return wild  Data from the channel, normally bytes.
+   * @return mixed  Data from the channel, normally bytes.
    *
    * @task io
    */
@@ -65,8 +65,8 @@ abstract class PhutilChannel extends Phobject {
    *
    * The default implementation accepts bytes.
    *
-   * @param   wild  Data to write to the channel, normally bytes.
-   * @return  this
+   * @param   mixed  Data to write to the channel, normally bytes.
+   * @return  PhutilChannel
    *
    * @task io
    */
@@ -91,8 +91,8 @@ abstract class PhutilChannel extends Phobject {
    * @{method:waitForActivity}.
    *
    * @param   list<PhutilChannel>   A list of channels to wait for.
-   * @param   dict                  Options, see above.
-   * @return  void
+   * @param   array<string, mixed>                  Options, see above.
+   * @return  void|bool
    *
    * @task wait
    */
@@ -121,7 +121,7 @@ abstract class PhutilChannel extends Phobject {
    *
    * @param list<PhutilChannel> List of channels to wait for reads on.
    * @param list<PhutilChannel> List of channels to wait for writes on.
-   * @return void
+   * @return bool|void
    *
    * @task wait
    */
@@ -246,7 +246,7 @@ abstract class PhutilChannel extends Phobject {
    * channel code more easily, by naming channels something meaningful.
    *
    * @param string Channel name.
-   * @return this
+   * @return PhutilChannel
    *
    * @task impl
    */
@@ -335,7 +335,7 @@ abstract class PhutilChannel extends Phobject {
   /**
    * Get sockets to select for reading.
    *
-   * @return list<stream> Read sockets.
+   * @return array Read sockets.
    *
    * @task impl
    */
@@ -347,7 +347,7 @@ abstract class PhutilChannel extends Phobject {
   /**
    * Get sockets to select for writing.
    *
-   * @return list<stream> Write sockets.
+   * @return array Write sockets.
    *
    * @task impl
    */
@@ -362,7 +362,7 @@ abstract class PhutilChannel extends Phobject {
    * consumed.
    *
    * @param int|null Maximum read buffer size, or `null` for a limitless buffer.
-   * @return this
+   * @return PhutilChannel
    * @task impl
    */
   public function setReadBufferSize($size) {

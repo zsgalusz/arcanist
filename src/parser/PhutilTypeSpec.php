@@ -34,7 +34,7 @@
  *
  *    int|string
  *    map<int, bool>
- *    list<list<wild>>
+ *    list<list<mixed>>
  *    optional int
  *    string (uppercase)
  *

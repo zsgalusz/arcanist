@@ -13,8 +13,8 @@
  *
  *    id(new Thing())->doStuff();
  *
- * @param   wild Anything.
- * @return  wild Unmodified argument.
+ * @param   mixed Anything.
+ * @return  mixed Unmodified argument.
  */
 function id($x) {
   return $x;
@@ -28,9 +28,9 @@ function id($x) {
  *
  * @param   array   Array to access.
  * @param   scalar  Index to access in the array.
- * @param   wild    Default value to return if the key is not present in the
+ * @param   mixed    Default value to return if the key is not present in the
  *                  array.
- * @return  wild    If `$array[$key]` exists, that value is returned. If not,
+ * @return  mixed    If `$array[$key]` exists, that value is returned. If not,
  *                  $default is returned without raising a warning.
  */
 function idx(array $array, $key, $default = null) {
@@ -58,8 +58,8 @@ function idx(array $array, $key, $default = null) {
  *
  * @param array Array to access.
  * @param list<string> List of keys to access, in sequence.
- * @param wild Default value to return.
- * @return wild Accessed value, or default if the value is not accessible.
+ * @param mixed Default value to return.
+ * @return mixed Accessed value, or default if the value is not accessible.
  */
 function idxv(array $map, array $path, $default = null) {
   if (!$path) {
@@ -134,7 +134,7 @@ function idxv(array $map, array $path, $default = null) {
  *                        array. Use a string like 'getID' to use the result
  *                        of calling the named method as each object's key, or
  *                        `null` to preserve the original keys.
- * @return  dict          A dictionary with keys and values derived according
+ * @return  array<string, mixed>          A dictionary with keys and values derived according
  *                        to whatever you passed as `$method` and `$key_method`.
  */
 function mpull(array $list, $method, $key_method = null) {
@@ -207,7 +207,7 @@ function mpull(array $list, $method, $key_method = null) {
  *                        array. Use a string like 'id' to use the result of
  *                        accessing the named property as each object's key, or
  *                        `null` to preserve the original keys.
- * @return  dict          A dictionary with keys and values derived according
+ * @return  array<string, mixed>          A dictionary with keys and values derived according
  *                        to whatever you passed as `$property` and
  *                        `$key_property`.
  */
@@ -256,7 +256,7 @@ function ppull(array $list, $property, $key_property = null) {
  * @param   scalar|null   Determines which **keys** will appear in the result
  *                        array. Use a scalar to select that index from each
  *                        array, or null to preserve the array keys.
- * @return  dict          A dictionary with keys and values derived according
+ * @return  array<string, mixed>          A dictionary with keys and values derived according
  *                        to whatever you passed for `$index` and `$key_index`.
  */
 function ipull(array $list, $index, $key_index = null) {
@@ -304,7 +304,7 @@ function ipull(array $list, $index, $key_index = null) {
  *                  in order to determine which group it should be placed into.
  * @param   ...     Zero or more additional method names, to subgroup the
  *                  groups.
- * @return  dict    Dictionary mapping distinct method returns to lists of
+ * @return  array<string, array<string, mixed>>    Dictionary mapping distinct method returns to lists of
  *                  all objects which returned that value.
  */
 function mgroup(array $list, $by /* , ... */) {
@@ -344,7 +344,7 @@ function mgroup(array $list, $by /* , ... */) {
  *                  determine which group it should be placed into.
  * @param   ...     Zero or more additional indexes names, to subgroup the
  *                  groups.
- * @return  dict    Dictionary mapping distinct index values to lists of
+ * @return  array<string, array<string, mixed>>    Dictionary mapping distinct index values to lists of
  *                  all objects which had that value at the index.
  */
 function igroup(array $list, $by /* , ... */) {
@@ -598,9 +598,9 @@ function ifilter(array $list, $index, $negate = false) {
  * uses: either reducing a large dictionary to a smaller one, or changing the
  * key order on an existing dictionary.
  *
- * @param  dict    Dictionary of key-value pairs to select from.
+ * @param  array<string, mixed>    Dictionary of key-value pairs to select from.
  * @param  list    List of keys to select.
- * @return dict    Dictionary of only those key-value pairs where the key was
+ * @return array<string, mixed>    Dictionary of only those key-value pairs where the key was
  *                 present in the list of keys to select. Ordering is
  *                 determined by the list order.
  */
@@ -657,8 +657,8 @@ function assert_instances_of(array $arr, $class) {
 /**
  * Assert that two arrays have the exact same keys, in any order.
  *
- * @param map Array with expected keys.
- * @param map Array with actual keys.
+ * @param array<string, mixed> Array with expected keys.
+ * @param array<string, mixed> Array with actual keys.
  * @return void
  */
 function assert_same_keys(array $expect, array $actual) {
@@ -794,7 +794,7 @@ function nonempty(/* ... */) {
  *
  * @param  string  The name of a class.
  * @param  list    Array of arguments to pass to its constructor.
- * @return obj     A new object of the specified class, constructed by passing
+ * @return object     A new object of the specified class, constructed by passing
  *                 the argument vector to its constructor.
  */
 function newv($class_name, array $argv) {
@@ -813,7 +813,7 @@ function newv($class_name, array $argv) {
  * a function.
  *
  * @param    array Array to retrieve the first element from.
- * @return   wild  The first value of the array.
+ * @return   mixed  The first value of the array.
  */
 function head(array $arr) {
   return reset($arr);
@@ -825,7 +825,7 @@ function head(array $arr) {
  * it -- e.g., the result of some other array operation.
  *
  * @param    array Array to retrieve the last element from.
- * @return   wild  The last value of the array.
+ * @return   mixed  The last value of the array.
  */
 function last(array $arr) {
   return end($arr);
@@ -952,7 +952,7 @@ function phutil_split_lines($corpus, $retain_endings = true) {
  *   $result = array_fuse($list);
  *
  * @param   list  List of scalars.
- * @return  dict  Dictionary with inputs mapped to themselves.
+ * @return  array<string, mixed>  Dictionary with inputs mapped to themselves.
  */
 function array_fuse(array $list) {
   if ($list) {
@@ -976,7 +976,7 @@ function array_fuse(array $list) {
  *
  * This function does not preserve keys.
  *
- * @param wild  Element to interleave.
+ * @param mixed  Element to interleave.
  * @param list  List of elements to be interleaved.
  * @return list Original list with the new element interleaved.
  */
@@ -1325,7 +1325,7 @@ function phutil_json_decode($string) {
 /**
  * Encode a value in JSON, raising an exception if it can not be encoded.
  *
- * @param wild A value to encode.
+ * @param mixed A value to encode.
  * @return string JSON representation of the value.
  */
 function phutil_json_encode($value) {
@@ -1365,7 +1365,7 @@ function phutil_json_encode($value) {
 /**
  * Produce a human-readable explanation why a value can not be JSON-encoded.
  *
- * @param wild Value to validate.
+ * @param mixed Value to validate.
  * @param string Path within the object to provide context.
  * @return string|null Explanation of why it can't be encoded, or null.
  */
@@ -1526,7 +1526,7 @@ function phutil_censor_credentials($string) {
  * This function is intended to behave similarly to PHP's `var_export` function,
  * but the output is intended to follow our style conventions.
  *
- * @param  wild    The variable you want to export.
+ * @param  mixed    The variable you want to export.
  * @return string
  */
 function phutil_var_export($var) {
@@ -1689,7 +1689,7 @@ function phutil_hashes_are_identical($u, $v) {
 /**
  * Build a query string from a dictionary.
  *
- * @param map<string, string> Dictionary of parameters.
+ * @param array<string, string> Dictionary of parameters.
  * @return string HTTP query string.
  */
 function phutil_build_http_querystring(array $parameters) {
@@ -1704,7 +1704,7 @@ function phutil_build_http_querystring(array $parameters) {
 /**
  * Build a query string from a list of parameter pairs.
  *
- * @param list<pair<string, string>> List of pairs.
+ * @param list<array> List of pairs.
  * @return string HTTP query string.
  */
 function phutil_build_http_querystring_from_pairs(array $pairs) {
@@ -1738,7 +1738,7 @@ function phutil_build_http_querystring_from_pairs(array $pairs) {
  *
  * @param scalar HTTP parameter key.
  * @param scalar HTTP parameter value.
- * @return pair<string, string> Key and value as strings.
+ * @return array Key and value as strings.
  */
 function phutil_http_parameter_pair($key, $value) {
   try {
@@ -1803,7 +1803,7 @@ function phutil_decode_mime_header($header) {
  * We also reject arrays. PHP casts them to the string "Array". This behavior
  * is, charitably, evil.
  *
- * @param wild Any value which aspires to be represented as a string.
+ * @param mixed Any value which aspires to be represented as a string.
  * @return string String representation of the provided value.
  */
 function phutil_string_cast($value) {
@@ -1840,7 +1840,7 @@ function phutil_string_cast($value) {
  * This is similar to "get_type()", but describes objects and arrays in more
  * detail.
  *
- * @param wild Anything.
+ * @param mixed Anything.
  * @return string Human-readable description of the value's type.
  */
 function phutil_describe_type($value) {
@@ -2109,7 +2109,7 @@ function phutil_raise_preg_exception($function, array $argv) {
  * This method raises an exception if passed a value which is neither null
  * nor a string.
  *
- * @param Value to test.
+ * @param mixed to test.
  * @return bool True if the parameter is a nonempty string.
  */
 function phutil_nonempty_string($value) {
@@ -2143,7 +2143,7 @@ function phutil_nonempty_string($value) {
  *
  * This method raises an exception if passed any other value.
  *
- * @param Value to test.
+ * @param mixed to test.
  * @return bool True if the parameter is a nonempty, stringlike value.
  */
 function phutil_nonempty_stringlike($value) {
@@ -2190,7 +2190,7 @@ function phutil_nonempty_stringlike($value) {
  *
  * This method raises an exception if passed any other value.
  *
- * @param Value to test.
+ * @param mixed to test.
  * @return bool True if the parameter is a nonempty, scalar value.
  */
 function phutil_nonempty_scalar($value) {
