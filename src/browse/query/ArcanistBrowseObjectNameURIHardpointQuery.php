@@ -42,7 +42,7 @@ final class ArcanistBrowseObjectNameURIHardpointQuery
       }
 
       $uri = idx($object, 'uri');
-      if (!strlen($uri)) {
+      if ($uri === null || !strlen($uri)) {
         continue;
       }
 

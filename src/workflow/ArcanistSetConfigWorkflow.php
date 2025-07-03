@@ -87,7 +87,7 @@ EOTEXT
       $old = $config[$key];
     }
 
-    if (!strlen($val)) {
+    if ($val === null || !strlen($val)) {
       unset($config[$key]);
       if ($is_local) {
         $configuration_manager->writeLocalArcConfig($config);

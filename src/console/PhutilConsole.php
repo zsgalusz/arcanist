@@ -170,7 +170,7 @@ final class PhutilConsole extends Phobject {
 
   // Must be public because it is called from output buffering.
   public function redirectOutCallback($string) {
-    if (strlen($string)) {
+    if ($string !== null && strlen($string)) {
       $this->flushing = false;
       $this->writeOut('%s', $string);
       $this->flushing = true;

@@ -218,7 +218,7 @@ final class PhutilInteractiveEditor extends Phobject {
    * @task config
    */
   public function getName() {
-    if (!strlen($this->name)) {
+    if ($this->name === null || !strlen($this->name)) {
       return 'untitled';
     }
     return $this->name;

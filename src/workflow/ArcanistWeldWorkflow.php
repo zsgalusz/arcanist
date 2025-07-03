@@ -38,7 +38,7 @@ EOTEXT
     $buffer = array();
     foreach ($files as $file) {
       $data = Filesystem::readFile($file);
-      if (!strlen($data)) {
+      if ($data === null || !strlen($data)) {
         continue;
       }
       $lines = phutil_split_lines($data, true);

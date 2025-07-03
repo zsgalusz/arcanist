@@ -114,7 +114,7 @@ EOTEXT
     $display_path = Filesystem::readablePath($path);
 
     $display_name = $file_ref->getName();
-    if (!strlen($display_name)) {
+    if ($display_name === null || !strlen($display_name)) {
       $display_name = $file_ref->getMonogram();
     }
 

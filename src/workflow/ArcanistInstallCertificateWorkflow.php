@@ -102,13 +102,13 @@ EOTEXT
     do {
       $token = phutil_console_prompt(pht('Paste API Token from that page:'));
       $token = trim($token);
-      if (strlen($token)) {
+      if ($token !== null && strlen($token)) {
         break;
       }
     } while (true);
 
     if ($is_token_auth) {
-      if (strlen($token) != 32) {
+      if ($token === null || strlen($token) != 32) {
         throw new ArcanistUsageException(
           pht(
             'The token "%s" is not formatted correctly. API tokens should '.
