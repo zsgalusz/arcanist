@@ -401,7 +401,7 @@ final class PhutilErrorHandler extends Phobject {
         } while ($current = self::getPreviousException($current));
         $messages = implode(' {>} ', $messages);
 
-        if (strlen($messages) > 4096) {
+        if ($messages !== null && strlen($messages) > 4096) {
           $messages = substr($messages, 0, 4096).'...';
         }
 
@@ -465,8 +465,8 @@ final class PhutilErrorHandler extends Phobject {
           break;
       }
 
-      if (!strncmp($root, $path, strlen($root))) {
-        return '<'.$library.'>'.substr($path, strlen($root));
+      if ($root !== null && !strncmp($root, $path, strlen($root))) {
+        return '<'.$library.'>'.substr($path, $root !== null ? strlen($root) : 0);
       }
     }
 

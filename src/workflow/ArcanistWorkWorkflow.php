@@ -68,7 +68,7 @@ EOHELP
           'or resume work on.'));
     } else if (count($argv) === 1) {
       $symbol_argument = $argv[0];
-      if (!strlen($symbol_argument)) {
+      if ($symbol_argument === null || !strlen($symbol_argument)) {
         throw new PhutilArgumentUsageException(
           pht(
             'Provide a nonempty symbol to begin or resume work on.'));

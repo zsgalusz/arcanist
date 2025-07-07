@@ -252,7 +252,7 @@ final class PhutilAWSv4Signature extends Phobject {
 
   private function getCredential() {
     $access_key = $this->accessKey;
-    if (!strlen($access_key)) {
+    if ($access_key === null || !strlen($access_key)) {
       throw new PhutilInvalidStateException('setAccessKey');
     }
 

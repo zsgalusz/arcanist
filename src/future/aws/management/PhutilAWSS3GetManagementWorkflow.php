@@ -24,21 +24,21 @@ final class PhutilAWSS3GetManagementWorkflow
 
   public function execute(PhutilArgumentParser $args) {
     $bucket = $args->getArg('bucket');
-    if (!strlen($bucket)) {
+    if ($bucket === null || !strlen($bucket)) {
       throw new PhutilArgumentUsageException(
         pht(
           'Specify an AWS S3 bucket to access with --bucket.'));
     }
 
     $endpoint = $args->getArg('endpoint');
-    if (!strlen($endpoint)) {
+    if ($endpoint === null || !strlen($endpoint)) {
       throw new PhutilArgumentUsageException(
         pht(
           'Specify an AWS S3 endpoint with --endpoint.'));
     }
 
     $key = $args->getArg('key');
-    if (!strlen($key)) {
+    if ($key === null || !strlen($key)) {
       throw new PhutilArgumentUsageException(
         pht(
           'Specify an AWS S3 object key to access with --key.'));

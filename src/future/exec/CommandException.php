@@ -52,17 +52,17 @@ final class CommandException extends Exception {
   }
 
   private function summarize($string) {
-    if (!strlen($string)) {
+    if ($string === null || !strlen($string)) {
       return '(empty)';
     }
 
     $limit = 1000;
 
-    $len = strlen($string);
+    $len = $string !== null ? strlen($string) : 0;
     if ($len > $limit) {
       $cut = $len - $limit;
       $suffix = pht('... (%s more byte(s)) ...', new PhutilNumber($cut));
-      if ($cut > strlen($suffix)) {
+      if ($cut > ($suffix !== null ? strlen($suffix) : 0)) {
         $string = substr($string, 0, $limit).$suffix;
       }
     }

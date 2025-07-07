@@ -708,7 +708,7 @@ EOTEXT
 
         $revision['message'] = ArcanistCommentRemover::removeComments(
           $update_messages[$revision_id]);
-        if (!strlen(trim($revision['message']))) {
+        if (!strlen(trim($revision['message'] ?? ''))) {
           throw new ArcanistUserAbortException();
         }
 

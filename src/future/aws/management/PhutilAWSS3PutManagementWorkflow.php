@@ -24,7 +24,7 @@ final class PhutilAWSS3PutManagementWorkflow
 
   public function execute(PhutilArgumentParser $args) {
     $key = $args->getArg('key');
-    if (!strlen($key)) {
+    if ($key === null || !strlen($key)) {
       throw new PhutilArgumentUsageException(
         pht(
           'Specify an AWS S3 object key to access with --key.'));

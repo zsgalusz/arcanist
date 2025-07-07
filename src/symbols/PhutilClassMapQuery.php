@@ -209,7 +209,7 @@ final class PhutilClassMapQuery extends Phobject {
    */
   private function loadMap() {
     $ancestor = $this->ancestorClass;
-    if (!strlen($ancestor)) {
+    if ($ancestor === null || !strlen($ancestor)) {
       throw new PhutilInvalidStateException('setAncestorClass');
     }
 

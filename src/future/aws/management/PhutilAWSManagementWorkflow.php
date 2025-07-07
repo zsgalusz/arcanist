@@ -13,9 +13,9 @@ abstract class PhutilAWSManagementWorkflow
     $access_key = $argv->getArg('access-key');
     $secret_key = $argv->getArg('secret-key');
 
-    $has_root = (strlen($access_key) || strlen($secret_key));
+    $has_root = (strlen($access_key ?? '') || strlen($secret_key ?? ''));
     if ($has_root) {
-      if (!strlen($access_key) || !strlen($secret_key)) {
+      if (!strlen($access_key ?? '') || !strlen($secret_key ?? '')) {
         throw new PhutilArgumentUsageException(
           pht(
             'When specifying AWS credentials with --access-key and '.
@@ -35,7 +35,7 @@ abstract class PhutilAWSManagementWorkflow
     }
 
     $region = $argv->getArg('region');
-    if (!strlen($region)) {
+    if (!strlen($region ?? '')) {
       throw new PhutilArgumentUsageException(
         pht(
           'You must specify an AWS region with --region.'));
@@ -44,7 +44,7 @@ abstract class PhutilAWSManagementWorkflow
     $template->setRegion($region);
 
     $endpoint = $argv->getArg('endpoint');
-    if (!strlen($endpoint)) {
+    if (!strlen($endpoint ?? '')) {
       throw new PhutilArgumentUsageException(
         pht(
           'You must specify an AWS endpoint with --endpoint.'));

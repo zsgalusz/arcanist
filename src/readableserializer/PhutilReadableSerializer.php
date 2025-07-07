@@ -67,7 +67,7 @@ final class PhutilReadableSerializer extends Phobject {
       // yet.
       $limit = 1024;
       $str = self::printableValue($value);
-      if (strlen($str) > $limit) {
+      if ($str !== null && strlen($str) > $limit) {
         if (is_string($value)) {
           $str = "'".substr($str, 1, $limit)."...'";
         } else {
