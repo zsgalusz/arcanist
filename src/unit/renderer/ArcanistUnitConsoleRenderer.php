@@ -12,7 +12,7 @@ final class ArcanistUnitConsoleRenderer extends ArcanistUnitRenderer {
 
     $test_name = $result->getName();
     $test_namespace = $result->getNamespace();
-    if (strlen($test_namespace)) {
+    if (strlen($test_namespace ?? '')) {
       $test_name = $test_namespace.'::'.$test_name;
     }
 
@@ -22,7 +22,7 @@ final class ArcanistUnitConsoleRenderer extends ArcanistUnitRenderer {
       $test_name);
 
     if ($result_code != ArcanistUnitTestResult::RESULT_PASS
-        && strlen($result->getUserData())) {
+        && strlen($result->getUserData() ?? '')) {
       $return .= $result->getUserData()."\n";
     }
 

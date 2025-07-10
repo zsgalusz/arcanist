@@ -465,8 +465,8 @@ final class PhutilErrorHandler extends Phobject {
           break;
       }
 
-      if ($root !== null && !strncmp($root, $path, strlen($root))) {
-        return '<'.$library.'>'.substr($path, $root !== null ? strlen($root) : 0);
+      if ($root !== null && !strncmp($root, $path, strlen($root ?? ''))) {
+        return '<'.$library.'>'.substr($path, strlen($root ?? ''));
       }
     }
 
