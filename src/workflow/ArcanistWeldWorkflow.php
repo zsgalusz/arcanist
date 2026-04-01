@@ -46,11 +46,11 @@ EOTEXT
       $overlap = mt_rand(16, 32);
 
       if (count($buffer) > 6) {
-        $overlap = min($overlap, ceil(count($buffer) / 2));
+        $overlap = min($overlap, (int)ceil(count($buffer) / 2));
       }
 
       if (count($lines) > 6) {
-        $overlap = min($overlap, ceil(count($lines) / 2));
+        $overlap = min($overlap, (int)ceil(count($lines) / 2));
       }
 
       $overlap = min($overlap, count($buffer));
