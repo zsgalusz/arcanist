@@ -192,7 +192,7 @@ abstract class PhutilChannel extends Phobject {
     }
 
     $wait_sec = (int)$wait;
-    $wait_usec = 1000000 * ($wait - $wait_sec);
+    $wait_usec = (int)(1000000 * ($wait - $wait_sec));
 
     @stream_select($read, $write, $except, $wait_sec, $wait_usec);
   }
