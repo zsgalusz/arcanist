@@ -34,6 +34,10 @@ function id($x) {
  *                  $default is returned without raising a warning.
  */
 function idx(array $array, $key, $default = null) {
+  if ($key === null) {
+    return $default;
+  }
+
   // isset() is a micro-optimization - it is fast but fails for null values.
   if (isset($array[$key])) {
     return $array[$key];
