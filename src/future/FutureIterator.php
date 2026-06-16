@@ -76,12 +76,17 @@ final class FutureIterator
     // interpret it to mean that we should iterate over whatever futures
     // remain.
 
-    if ($this->hasRewound) {
-      while ($this->valid()) {
-        $this->next();
-      }
-    } else {
-      iterator_to_array($this);
+    // NOTE: This previously used "iterator_to_array($this)" for the initial
+    // drain, but that segfaults under PHP 8.5 (null dereference inside
+    // "spl_iterator_apply"). Draining the iterator manually is equivalent --
+    // the resolved values are discarded here regardless.
+
+    if (!$this->hasRewound) {
+      $this->rewind();
+    }
+
+    while ($this->valid()) {
+      $this->next();
     }
   }
 

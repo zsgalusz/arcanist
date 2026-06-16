@@ -143,7 +143,13 @@ EOTEXT
     }
 
     if ($everything) {
-      $paths = iterator_to_array($this->getRepositoryAPI()->getAllFiles());
+      // NOTE: Avoid "iterator_to_array()" here; it segfaults under PHP 8.5
+      // (null dereference inside "spl_iterator_apply"). This manual loop
+      // preserves keys, matching the previous behavior.
+      $paths = array();
+      foreach ($this->getRepositoryAPI()->getAllFiles() as $key => $path) {
+        $paths[$key] = $path;
+      }
     } else {
       $paths = $this->selectPathsForWorkflow($paths, $rev);
     }
