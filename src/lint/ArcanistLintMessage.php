@@ -368,7 +368,7 @@ final class ArcanistLintMessage extends Phobject {
       }
     }
 
-    return (clone $this)
+    return id(clone $this)
       ->setOriginalText($original)
       ->setReplacementText($replacement)
       ->setLine($line)
