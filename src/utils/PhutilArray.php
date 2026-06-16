@@ -22,7 +22,14 @@ abstract class PhutilArray
 
 
   public function toArray() {
-    return iterator_to_array($this, true);
+    // NOTE: This avoids "iterator_to_array($this, true)" because that
+    // segfaults under PHP 8.5 (null dereference inside "spl_iterator_apply").
+    // The manual loop preserves keys, matching the previous behavior.
+    $result = array();
+    foreach ($this as $key => $value) {
+      $result[$key] = $value;
+    }
+    return $result;
   }
 
 
