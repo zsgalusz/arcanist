@@ -607,6 +607,15 @@ EOTEXT
 
     if ($this->requiresWorkingCopy()) {
       $repository_api = $this->getRepositoryAPI();
+
+      if ($repository_api->getBranchName() === 'master') {
+        if (!phutil_console_confirm(
+          pht('Are you sure you want to diff on the master branch?'),
+          $default_no = true)) {
+          throw new ArcanistUserAbortException();
+        }
+      }
+
       if ($this->getArgument('add-all')) {
         $this->setCommitMode(self::COMMIT_ENABLE);
       } else if ($this->getArgument('uncommitted')) {
