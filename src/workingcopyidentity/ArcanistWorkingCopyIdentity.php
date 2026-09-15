@@ -180,6 +180,20 @@ final class ArcanistWorkingCopyIdentity extends Phobject {
 
     $identity = new ArcanistWorkingCopyIdentity($project_root, $config);
     $identity->localMetaDir = $vcs_root.'/.'.$vcs_type;
+    if ($vcs_type === 'git' && is_file($identity->localMetaDir)) {
+      $pointer = trim(Filesystem::readFile($identity->localMetaDir));
+      if (preg_match('/^gitdir:\s*(.+)$/i', $pointer, $matches)) {
+        $gitdir = $matches[1];
+        if ($gitdir[0] !== '/') {
+          $gitdir = Filesystem::resolvePath(
+            $gitdir,
+            dirname($identity->localMetaDir));
+        }
+        if (is_dir($gitdir)) {
+          $identity->localMetaDir = $gitdir;
+        }
+      }
+    }
     $identity->localConfig = $identity->readLocalArcConfig();
     $identity->vcsType = $vcs_type;
     $identity->vcsRoot = $vcs_root;
