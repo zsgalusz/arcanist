@@ -7,6 +7,23 @@ final class ArcanistGitLandEngine
   private $landTargetCommitMap = array();
   private $deletedBranches = array();
 
+  private function isBranchInOtherWorktree($branch) {
+    $api = $this->getRepositoryAPI();
+    // Older Git releases without worktree porcelain keep their old behavior.
+    list($err) = $api->execManualLocal('worktree list --porcelain -z');
+    if ($err) {
+      return false;
+    }
+    $current = Filesystem::resolvePath($api->getPath());
+    foreach (ArcanistGitWorktreeCleanup::readWorktrees($api) as $record) {
+      if (idx($record, 'branch') === 'refs/heads/'.$branch &&
+          Filesystem::resolvePath($record['worktree']) !== $current) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private function setIsGitPerforce($is_git_perforce) {
     $this->isGitPerforce = $is_git_perforce;
     return $this;
@@ -31,6 +48,9 @@ final class ArcanistGitLandEngine
       $is_contains = false);
 
     foreach ($branch_map as $branch_name => $branch_hash) {
+      if ($this->isBranchInOtherWorktree($branch_name)) {
+        continue;
+      }
       $recovery_command = csprintf(
         'git checkout -b %s %s',
         $branch_name,
@@ -132,6 +152,9 @@ final class ArcanistGitLandEngine
 
     $log = $this->getLogEngine();
     foreach ($branch_map as $branch_name => $branch_head) {
+      if ($this->isBranchInOtherWorktree($branch_name)) {
+        continue;
+      }
       // If this branch just points at the old state, don't bother rebasing
       // it. We'll update or delete it later.
       if ($branch_head === $old_commit) {
@@ -615,6 +638,12 @@ final class ArcanistGitLandEngine
     $api = $this->getRepositoryAPI();
     $log = $this->getWorkflow()->getLogEngine();
 
+    if ($this->getWorktreeCleanup()) {
+      $api->execxLocal('checkout --detach %s --', $into_commit);
+      $state->discardLocalState();
+      return;
+    }
+
     // Try to put the user into the best final state we can. This is very
     // complicated because users are incredibly creative and their local
     // branches may, for example, have the same names as branches in the
@@ -678,6 +707,11 @@ final class ArcanistGitLandEngine
 
     $is_perforce = $this->getIsGitPerforce();
     if ($is_perforce) {
+      foreach ($update_branches as $key => $update_branch) {
+        if ($this->isBranchInOtherWorktree($update_branch)) {
+          unset($update_branches[$key]);
+        }
+      }
       // If we're in Perforce mode, we don't expect to have a meaningful
       // path to the remote: the "p4" remote is not a real remote, and
       // "git p4" commands do not configure branch upstreams to provide
@@ -815,6 +849,15 @@ final class ArcanistGitLandEngine
               $pull_branch));
 
           break;
+        }
+
+        if ($this->isBranchInOtherWorktree($pull_branch)) {
+          $log->writeStatus(
+            pht('WORKTREE'),
+            pht(
+              'Leaving "%s" unchanged: it is checked out in another worktree.',
+              $pull_branch));
+          continue;
         }
 
         $log->writeStatus(
