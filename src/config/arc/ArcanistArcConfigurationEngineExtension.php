@@ -101,7 +101,9 @@ final class ArcanistArcConfigurationEngineExtension
           )),
       id(new ArcanistAliasesConfigOption())
         ->setKey(self::KEY_ALIASES)
-        ->setDefaultValue(array())
+        ->setDefaultValue(array(
+          'landtree' => array('land', '--cleanup-worktree'),
+        ))
         ->setSummary(pht('List of command aliases.'))
         ->setHelp(
           pht(
