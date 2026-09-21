@@ -119,6 +119,17 @@ after the process finishes. The working copy is put into that state.
 
 Any obsolete refs that point at commits which were published are deleted,
 unless the **--keep-branches** flag is passed.
+
+With **--cleanup-worktree**, land the current branch from a clean linked Git
+worktree, then remove that worktree and its source branch after a successful
+push. The primary checkout and other worktrees are left in place. Git-ignored
+files inside the removed checkout are removed too. With **--keep-branches**,
+keep the source branch. Preview never removes anything; **--hold**, **--pick**,
+and **--incremental** can not be combined with cleanup.
+
+**arc landtree** is an alias for **arc land --cleanup-worktree**. After cleanup,
+change your shell to another directory: a subprocess can not move its parent
+shell. Runtime environments and external services are not managed by this flag.
 EOTEXT
       );
 
@@ -130,6 +141,10 @@ EOTEXT
 
   public function getWorkflowArguments() {
     return array(
+      $this->newWorkflowArgument('cleanup-worktree')
+        ->setHelp(pht(
+          'Remove the current linked Git worktree after landing '.
+          'succeeds.')),
       $this->newWorkflowArgument('hold')
         ->setHelp(
           pht(
@@ -322,13 +337,40 @@ EOTEXT
     $strategy = $this->getArgument('strategy');
     $pick = $this->getArgument('pick');
 
+    $cleanup = null;
+    if ($this->getArgument('cleanup-worktree')) {
+      if (!($repository_api instanceof ArcanistGitAPI)) {
+        throw new PhutilArgumentUsageException(
+          pht('Worktree cleanup is supported only in Git.'));
+      }
+      if ($should_hold || $is_incremental || $pick) {
+        throw new PhutilArgumentUsageException(
+          pht(
+            'Worktree cleanup can not be combined with --hold, '.
+            '--incremental, or --pick.'));
+      }
+      $cleanup = ArcanistGitWorktreeCleanup::newPlan(
+        $repository_api,
+        $should_keep);
+      if ($source_refs && $source_refs !== array($cleanup->getBranch())) {
+        throw new PhutilArgumentUsageException(
+          pht(
+            'Worktree cleanup must land only the current branch. Omit '.
+            'the ref argument or name that branch.'));
+      }
+      $this->getLogEngine()->writeStatus(
+        pht('WORKTREE'),
+        pht('After landing, remove worktree "%s".', $cleanup->getPath()));
+    }
+
     $land_engine
+      ->setWorktreeCleanup($cleanup)
       ->setViewer($this->getViewer())
       ->setWorkflow($this)
       ->setLogEngine($this->getLogEngine())
       ->setSourceRefs($source_refs)
       ->setShouldHold($should_hold)
-      ->setShouldKeep($should_keep)
+      ->setShouldKeep($should_keep || $cleanup !== null)
       ->setStrategyArgument($strategy)
       ->setShouldPreview($is_preview)
       ->setOntoRemoteArgument($onto_remote_arg)

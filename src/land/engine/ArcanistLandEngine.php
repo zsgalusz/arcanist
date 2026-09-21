@@ -4,6 +4,7 @@ abstract class ArcanistLandEngine
   extends ArcanistWorkflowEngine {
 
   private $sourceRefs;
+  private $worktreeCleanup;
   private $shouldHold;
   private $shouldKeep;
   private $shouldPreview;
@@ -30,6 +31,15 @@ abstract class ArcanistLandEngine
   private $localState;
   private $hasUnpushedChanges;
   private $pickArgument;
+
+  final public function setWorktreeCleanup($cleanup) {
+    $this->worktreeCleanup = $cleanup;
+    return $this;
+  }
+
+  final public function getWorktreeCleanup() {
+    return $this->worktreeCleanup;
+  }
 
   final public function setOntoRemote($onto_remote) {
     $this->ontoRemote = $onto_remote;
@@ -1191,6 +1201,16 @@ abstract class ArcanistLandEngine
     }
 
     $sets = $this->filterCommitSets($sets);
+    $cleanup = $this->getWorktreeCleanup();
+    if ($cleanup) {
+      $selected_commits = array();
+      foreach ($sets as $set) {
+        foreach ($set->getCommits() as $commit) {
+          $selected_commits[] = $commit->getHash();
+        }
+      }
+      $cleanup->assertSelectedCommits($selected_commits);
+    }
 
     if (!$this->getShouldPreview()) {
       $this->confirmImplicitCommits($sets, $symbols);
@@ -1226,6 +1246,10 @@ abstract class ArcanistLandEngine
     $is_incremental = $this->getIsIncremental();
     $is_hold = $this->getShouldHold();
     $is_keep = $this->getShouldKeep();
+
+    if ($cleanup) {
+      $cleanup->assertReady();
+    }
 
     $local_state = $api->newLocalState()
       ->setWorkflow($workflow)
@@ -1331,6 +1355,29 @@ abstract class ArcanistLandEngine
     } catch (Throwable $ex) {
       $local_state->restoreLocalState();
       throw $ex;
+    }
+    // Publication and state reconciliation have finished. Cleanup errors must
+    // never enter the rollback path or restore a deleted working directory.
+    if ($cleanup) {
+      $cleanup_error = null;
+      try {
+        $cleanup->execute($into_commit);
+      } catch (Exception $ex) {
+        $cleanup_error = $ex;
+      } catch (Throwable $ex) {
+        $cleanup_error = $ex;
+      }
+      if ($cleanup_error) {
+        throw new PhutilProxyException(
+          pht(
+            'Changes were landed, but worktree cleanup failed. Do not land '.
+            'again; inspect the checkout and finish cleanup manually.'),
+          $cleanup_error);
+      }
+      $log->writeSuccess(
+        pht('WORKTREE'),
+        pht('Removed worktree "%s". Change your shell to another directory.',
+          $cleanup->getPath()));
     }
   }
 
