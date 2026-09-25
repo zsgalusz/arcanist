@@ -140,11 +140,14 @@ final class ArcanistGitRepositoryMarkerQuery
     $api = $this->getRepositoryAPI();
 
     // NOTE: Since we only care about branches today, we only list branches.
+    // Use "--heads" rather than a "refs/heads/*" pattern: Git filters
+    // patterns locally after the server has sent every ref (on GitHub, that
+    // includes "refs/pull/*" for every pull request), while "--heads" asks
+    // the server for branches alone.
 
     $future = $api->newFuture(
-      'ls-remote --refs %s %s',
-      $remote->getRemoteName(),
-      'refs/heads/*');
+      'ls-remote --refs --heads %s',
+      $remote->getRemoteName());
     list($stdout) = $future->resolve();
 
     $branch_prefix = 'refs/heads/';
