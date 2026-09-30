@@ -169,12 +169,47 @@ final class ArcanistGitWorktreeCleanup extends Phobject {
       }
     }
 
-    // No --force: Git must also accept the current ownership and cleanliness.
     // Leave this process outside the directory before removing it. A child
     // process can not change the invoking shell's working directory.
     if (!chdir($this->commonDirectory)) {
       throw new Exception(pht('Unable to leave the worktree before cleanup.'));
     }
+
+    // Delete the directory before Git's record of it. "git worktree remove"
+    // drops ".git/worktrees/<id>" even when it could not empty the directory,
+    // which happens when something keeps writing into it (a VM runtime bound
+    // to the checkout). That leaves a directory whose ".git" file points
+    // nowhere and no branch: nothing can run Git in it any more. Deleting
+    // ".git" last keeps the entry and the branch intact if deletion fails, so
+    // what remains is still a worktree. assertClean() already required what
+    // "git worktree remove" would have: no changes, no untracked files, no
+    // submodules.
+    try {
+      foreach (Filesystem::listDirectory($this->path, true) as $child) {
+        if ($child === '.git') {
+          continue;
+        }
+        Filesystem::remove($this->path.DIRECTORY_SEPARATOR.$child);
+      }
+      Filesystem::remove($this->path.DIRECTORY_SEPARATOR.'.git');
+      Filesystem::remove($this->path);
+    } catch (FilesystemException $ex) {
+      throw new PhutilArgumentUsageException(
+        pht(
+          'Could not delete the worktree directory "%s": %s The worktree '.
+          'entry and branch "%s" were kept. Stop whatever is writing into '.
+          'that directory (for example its VM runtime), then run '.
+          '"git worktree remove --force -- %s"%s.',
+          $this->path,
+          $ex->getMessage(),
+          $this->branch,
+          $this->path,
+          $this->keepBranch
+            ? ''
+            : pht(' and "git branch -D %s"', $this->branch)));
+    }
+
+    // The directory is gone, so this only removes ".git/worktrees/<id>".
     execx(
       'git --git-dir %s worktree remove -- %s',
       $this->commonDirectory,
