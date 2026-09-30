@@ -150,6 +150,43 @@ final class ArcanistGitWorktreeCleanupTestCase extends PhutilTestCase {
     }
   }
 
+  public function testUndeletableWorktreeKeepsEntryAndBranch() {
+    if (posix_geteuid() === 0) {
+      $this->assertSkipped(pht('Root can delete anything.'));
+    }
+    list($fixture, $main, $api) = $this->newRepository();
+    list($head) = $api->execxLocal('rev-parse HEAD');
+    $head = trim($head);
+    $plan = $this->newPlan($api);
+    $api->execxLocal('checkout --detach %s --', $head);
+    // A ".git" file that points nowhere is what a runtime writing into the
+    // checkout used to leave behind; an unwritable ignored directory stands in
+    // for it, since that is the case a fixture can build.
+    $busy = $api->getPath('ignored');
+    Filesystem::createDirectory($busy);
+    Filesystem::writeFile($busy.'/held', 'held');
+    chmod($busy, 0555);
+    $cwd = getcwd();
+    try {
+      $this->assertException(
+        'PhutilArgumentUsageException',
+        function () use ($plan, $head) {
+          $plan->execute($head);
+        });
+    } finally {
+      chdir($cwd);
+      chmod($busy, 0755);
+    }
+    $this->assertTrue(is_file($api->getPath('.git')));
+    list($gitdir) = $api->execxLocal('rev-parse --git-dir');
+    $this->assertTrue(is_dir(trim($gitdir)));
+    $this->assertEqual(
+      2, count(ArcanistGitWorktreeCleanup::readWorktrees($main)));
+    list($err) = $main->execManualLocal(
+      'show-ref --verify refs/heads/feature');
+    $this->assertEqual(0, $err);
+  }
+
   public function testReadinessRechecksBranch() {
     list($fixture, $main, $api) = $this->newRepository();
     $plan = $this->newPlan($api);
