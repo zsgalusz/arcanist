@@ -82,8 +82,8 @@ final class ArcanistUnitConsoleRenderer extends ArcanistUnitRenderer {
 
   private function formatTime($seconds) {
     if ($seconds >= 60) {
-      $minutes = (int)floor($seconds / 60);
-      return pht('%dm%02ds', $minutes, (int)round($seconds % 60));
+      $rounded = (int)round($seconds);
+      return pht('%dm%02ds', intdiv($rounded, 60), $rounded % 60);
     }
 
     if ($seconds >= 1) {
