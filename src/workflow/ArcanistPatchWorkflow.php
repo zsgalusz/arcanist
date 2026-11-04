@@ -174,6 +174,10 @@ EOTEXT
     return ($this->getSource() != self::SOURCE_PATCH);
   }
 
+  public function requiresAuthentication() {
+    return $this->requiresConduit();
+  }
+
   public function requiresRepositoryAPI() {
     return true;
   }
